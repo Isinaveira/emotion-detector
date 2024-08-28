@@ -20,7 +20,7 @@ def emotion_detector(text_to_analyze):
             
             #Extracting relevant info
             emotions = response_json.get('emotionPredictions', {})[0].get('emotion')
-            print(emotions)
+            
             emotion_scores = {
                 'anger': emotions.get('anger'),
                 'disgust': emotions.get('disgust'),
@@ -28,7 +28,7 @@ def emotion_detector(text_to_analyze):
                 'joy': emotions.get('joy'),
                 'sadness': emotions.get('sadness'),
             }
-            print(emotion_scores)
+            
 
             #Output, all of the containing dic of emotion_scores plus 'dominant_emotion'
             output = {
@@ -36,7 +36,20 @@ def emotion_detector(text_to_analyze):
                 'dominant_emotion': max(emotions, key=emotions.get)
             }
 
-            print(output) 
+            return output
+        elif response.status_code == 400:
+            return {
+                'anger': None,
+                'disgust': None,
+                'fear': None,
+                'joy': None,
+                'sadness': None,
+                'dominant_emotion': None
+            }
+        
+        else:
+            print(f"Error: emotion detection request faild with status code {response.status_code}")
+            return None
 
 
     except Exception as e: 
